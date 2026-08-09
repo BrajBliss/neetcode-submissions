@@ -1,0 +1,37 @@
+class Solution {
+    /**
+     * @param {number[]} nums1
+     * @param {number[]} nums2
+     * @return {number}
+     */
+    findMedianSortedArrays(nums1, nums2) {
+        let A = nums1;
+        let B = nums2;
+        if (A.length > B.length) {
+            [A, B] = [B, A];
+        }
+        const total = A.length + B.length;
+        const half = Math.floor((total + 1) / 2);
+        let left = 0;
+        let right = A.length;
+        while (left <= right) {
+            const i = Math.floor((left + right) / 2);
+            const j = half - i;
+            const Aleft = i > 0 ? A[i - 1] : -Infinity;
+            const Aright = i < A.length ? A[i] : Infinity;
+            const Bleft = j > 0 ? B[j - 1] : -Infinity;
+            const Bright = j < B.length ? B[i] : Infinity;
+            if (Aleft <= Bright && Bleft <= Aright) {
+                if (total % 2 !== 0) {
+                    return Math.max(Aleft, Bleft);
+                }
+                return Math.max(Aleft, Bleft) + Math.min(Aright, Bright);
+            } else if (Aleft > Bright) {
+                right = i - 1;
+            } else {
+                left = i + 1;
+            }
+        }
+        return 0;
+    }
+}
